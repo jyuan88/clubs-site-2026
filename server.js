@@ -120,7 +120,9 @@ function renderSite() {
   const visible = cache.clubs.clubs.filter((c) => !c.hidden).map((c) => ({
     ...c, hasPoster: cache.posters.has(c.slug),
   }));
-  return tpl.site.replace('"__CLUBS_JSON__"', safeJson(visible));
+  return tpl.site
+    .replace('"__CLUBS_JSON__"', safeJson(visible))
+    .replace('"__EVENTS_JSON__"', safeJson(cache.clubs.events || []));
 }
 function renderAdmin() {
   const all = cache.clubs.clubs.map((c) => ({ ...c, hasPoster: cache.posters.has(c.slug) }));

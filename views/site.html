@@ -187,7 +187,7 @@ body.dialog-open{overflow:hidden}
   <button class="intro-skip" id="introSkip" type="button">跳过 →</button>
 </div>
 
-<header class="site-header"><div class="header-inner"><a class="brand" href="#top"><span class="brand-mark" aria-hidden="true"></span><span>员工社团 · CLUBS 2026</span></a><nav class="nav" aria-label="主导航"><a href="#featured">精选社团</a><a href="#all-clubs">发现社团</a><a href="#schedule">活动安排</a></nav><a class="header-cta" href="#featured">开始探索</a></div></header>
+<header class="site-header"><div class="header-inner"><a class="brand" href="#top"><span class="brand-mark" aria-hidden="true"></span><span>员工社团 · CLUBS 2026</span></a><nav class="nav" aria-label="主导航"><a href="#featured">近期活动</a><a href="#all-clubs">发现社团</a><a href="#schedule">活动安排</a></nav><a class="header-cta" href="#all-clubs">开始探索</a></div></header>
 <main id="top">
   <section class="hero">
     <div class="hero-inner">
@@ -195,7 +195,7 @@ body.dialog-open{overflow:hidden}
       <div class="atlas" aria-hidden="true"><div class="atlas-shadow"></div><div class="atlas-card back"></div><div class="atlas-card mid"></div><div class="atlas-card front"><div class="small">CLUB ATLAS · 2026</div><h2 class="serif">兴趣<br><span>坐标</span></h2><div class="atlas-line"></div><div class="atlas-list" id="atlasList"></div></div><i class="orb one"></i><i class="orb two"></i></div>
     </div><div class="scroll-hint">SCROLL TO EXPLORE</div>
   </section>
-  <section class="section featured" id="featured"><div class="container"><header class="section-head"><div><div class="section-kicker">FEATURED CLUBS</div><h2 class="section-title serif">本季主推<br>先睹为快</h2></div><p class="section-intro">点击卡片查看社团详情和完整海报，扫描海报上的二维码即可加入。</p></header><div class="featured-grid" id="featuredGrid"></div></div></section>
+  <section class="section featured" id="featured"><div class="container"><header class="section-head"><div><div class="section-kicker">UPCOMING EVENTS</div><h2 class="section-title serif">近期相关<br>活动</h2></div><p class="section-intro">迎新活动、社团赛事和课程安排确定后，会第一时间在这里发布。</p></header><div class="featured-grid" id="featuredGrid"></div></div></section>
   <section class="section club-browser" id="all-clubs"><div class="container"><header class="section-head reveal"><div><div class="section-kicker">EXPLORE ALL CLUBS</div><h2 class="section-title serif">寻找你的<br>兴趣坐标</h2></div><p class="section-intro">按类别或关键词筛选全部社团。资料尚未收齐的社团会明确标注"待补"，不虚构活动信息。</p></header><div class="browser-tools reveal"><div class="filters" role="group" aria-label="社团分类" id="filterBar"></div><label class="search-box"><span style="position:absolute;clip:rect(0 0 0 0)">搜索社团</span><input id="clubSearch" type="search" placeholder="搜索社团、地点或时间" autocomplete="off"></label></div><div class="result-line"><span>当前结果</span><span><b id="resultCount">0</b> 个社团</span></div><div class="clubs-grid" id="clubsGrid"></div><div class="no-results" id="noResults">没有找到匹配的社团，请更换关键词或分类。</div></div></section>
   <section class="section schedule" id="schedule"><div class="container"><header class="section-head reveal"><div><div class="section-kicker">WEEKLY SCHEDULE</div><h2 class="section-title serif">这一周<br>什么时候见</h2></div><p class="section-intro">按各协会提供的固定活动时间生成。未列出固定时间的社团以群内通知为准。</p></header><div class="week-board reveal" id="weekBoard"></div></div></section>
   <section class="section join-section" id="join"><div class="container"><header class="section-head reveal"><div><div class="section-kicker">HOW TO JOIN</div><h2 class="section-title serif">从感兴趣<br>到一起上场</h2></div><p class="section-intro">三步加入：选社团、看安排、扫海报上的二维码。</p></header><div class="steps reveal"><article class="step" data-step="1"><span class="step-no">STEP 01</span><h3 class="serif">先选兴趣</h3><p>通过分类和搜索快速找到社团，不需要逐页翻阅全部内容。</p></article><article class="step" data-step="2"><span class="step-no">STEP 02</span><h3 class="serif">再看安排</h3><p>在详情中核对时间、地点、活动内容和适合人群，判断是否合适。</p></article><article class="step" data-step="3"><span class="step-no">STEP 03</span><h3 class="serif">扫码加入</h3><p>打开社团详情里的海报，用微信扫描海报上的二维码进群或联系负责人。</p></article></div></div></section>
@@ -251,15 +251,25 @@ body.dialog-open{overflow:hidden}
     });
   })();
 
-  /* ---- featured ---- */
-  (function featured(){
-    var list=clubs.map(function(c,i){return{c:c,i:i};}).filter(function(x){return x.c.featured;}).slice(0,2);
-    document.getElementById("featuredGrid").innerHTML=list.map(function(x){
-      var c=x.c;
-      return '<article class="club-card" style="--accent:'+esc(c.color)+'" data-index="'+x.i+'"><div class="card-top"><span class="card-no">'+String(x.i+1).padStart(2,"0")+' / '+esc(c.group)+'</span><span class="card-tag">'+esc(c.name)+'</span></div><h3 class="serif">'+esc(c.titleA)+'<span>'+esc(c.titleB)+'</span></h3><p class="card-copy">'+esc(c.subtitle)+'</p><div class="card-art"></div><div class="card-meta"><div><b>'+esc(c.time||"时间待定")+'</b><span>'+esc(c.venue||"地点见群内通知")+'</span></div><button class="card-link" type="button">查看详情 →</button></div></article>';
-    }).join("");
-    document.getElementById("featuredGrid").addEventListener("click",function(e){
-      var card=e.target.closest(".club-card");if(card)openClub(Number(card.dataset.index));
+  /* ---- upcoming events ---- */
+  var events = "__EVENTS_JSON__";
+  (function upcoming(){
+    var grid2=document.getElementById("featuredGrid");
+    if(events&&events.length){
+      grid2.innerHTML=events.slice(0,4).map(function(ev,i){
+        var slugIdx=-1;clubs.forEach(function(c,ci){if(c.slug===ev.club)slugIdx=ci;});
+        return '<article class="club-card" style="--accent:'+esc(ev.color||"#E8701A")+'" data-index="'+slugIdx+'"><div class="card-top"><span class="card-no">'+String(i+1).padStart(2,"0")+' / EVENT</span><span class="card-tag">'+esc(ev.tag||"社团活动")+'</span></div><h3 class="serif">'+esc(ev.titleA||ev.name||"")+'<span>'+esc(ev.titleB||"")+'</span></h3><p class="card-copy">'+esc(ev.desc||"")+'</p><div class="card-art"></div><div class="card-meta"><div><b>'+esc(ev.time||"时间待定")+'</b><span>'+esc(ev.venue||"地点待定")+'</span></div>'+(slugIdx>-1?'<button class="card-link" type="button">相关社团 →</button>':'')+'</div></article>';
+      }).join("");
+    }else{
+      grid2.innerHTML=[0,1].map(function(i){
+        return '<article class="club-card pending-event" style="--accent:'+(i?'#2477D6':'#E8701A')+'" data-index="-1"><div class="card-top"><span class="card-no">'+String(i+1).padStart(2,"0")+' / EVENT</span><span class="card-tag">活动预告</span></div><h3 class="serif">敬请<span>期待</span></h3><p class="card-copy">活动信息征集中。迎新活动、社团赛事与课程安排确定后，将在此发布。</p><div class="card-art"></div><div class="card-meta"><div><b>时间待定</b><span>地点待定</span></div><button class="card-link" type="button">先去逛社团 →</button></div></article>';
+      }).join("");
+    }
+    grid2.addEventListener("click",function(e){
+      var card=e.target.closest(".club-card");if(!card)return;
+      var idx=Number(card.dataset.index);
+      if(idx>-1)openClub(idx);
+      else document.getElementById("all-clubs").scrollIntoView({behavior:"smooth"});
     });
   })();
 
