@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#111C35">
+<title>员工社团招新官网</title>
+<style>
+:root{--paper:#F2EDE2;--navy:#1B2A4A;--deep:#111C35;--orange:#E8701A;--ink:#17233e;--muted:#6d716f;--line:rgba(27,42,74,.16);--max:1240px;color-scheme:light}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;overflow-x:hidden}
+button,a{font:inherit}
+a{color:inherit;text-decoration:none}
+.serif{font-family:"Noto Serif SC","Songti SC","STSong",serif;font-weight:900}
+
+/* ---------- opening animation ---------- */
+#intro{position:fixed;inset:0;z-index:200;background:var(--deep);color:var(--paper);overflow:hidden;display:flex;align-items:center;justify-content:center}
+#intro.done{display:none}
+#intro::before{content:"";position:absolute;inset:0;opacity:.16;background-image:linear-gradient(rgba(255,255,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.07) 1px,transparent 1px);background-size:42px 42px}
+.intro-stage{position:relative;text-align:center;z-index:2}
+.intro-mark{width:44px;height:44px;border:3px solid var(--orange);margin:0 auto;transform:rotate(45deg) scale(0);animation:markIn .55s cubic-bezier(.2,1.4,.4,1) .15s forwards;position:relative}
+.intro-mark::after{content:"";position:absolute;width:11px;height:11px;right:4px;bottom:4px;background:var(--orange)}
+.intro-kicker{margin-top:26px;font-size:11px;font-weight:900;letter-spacing:.42em;color:#ff9b58;opacity:0;animation:fadeUp .6s ease .5s forwards}
+.intro-title{margin-top:18px;font-size:clamp(44px,7.2vw,92px);line-height:1.15;letter-spacing:.04em}
+.intro-title span{display:inline-block;opacity:0;transform:translateY(34px) rotate(2deg);animation:charIn .62s cubic-bezier(.2,1,.3,1) forwards}
+.intro-sub{margin-top:22px;font-size:12px;letter-spacing:.22em;color:rgba(242,237,226,.5);opacity:0;animation:fadeUp .6s ease 1.75s forwards}
+.intro-ball{position:absolute;left:50%;top:-140px;width:74px;height:74px;margin-left:220px;border-radius:50%;background:var(--orange);box-shadow:inset -18px -14px 24px rgba(110,36,0,.28),0 22px 34px rgba(0,0,0,.35);animation:ballDrop 1.15s cubic-bezier(.34,1.2,.64,1) .9s forwards;opacity:0}
+.intro-arc{position:absolute;left:0;right:0;bottom:12vh;z-index:1;pointer-events:none}
+.intro-arc path{stroke-dasharray:1 14;stroke-dashoffset:600;animation:arcDraw 1.4s ease 1.1s forwards}
+#intro .panel{position:absolute;left:0;width:100%;height:51%;background:var(--deep);z-index:3;pointer-events:none;opacity:0}
+#intro.leave .panel{opacity:1}
+#intro.leave .panel.t{top:0;animation:panelUp .8s cubic-bezier(.7,0,.2,1) forwards}
+#intro.leave .panel.b{bottom:0;animation:panelDown .8s cubic-bezier(.7,0,.2,1) forwards}
+#intro.leave .intro-stage,#intro.leave .intro-ball,#intro.leave .intro-arc{opacity:0;transition:opacity .25s}
+#intro.leave::before{opacity:0;transition:opacity .25s}
+#intro.leave{background:transparent;transition:background .1s .18s}
+.intro-skip{position:absolute;right:26px;bottom:24px;z-index:5;border:1px solid rgba(242,237,226,.3);background:transparent;color:rgba(242,237,226,.65);padding:9px 16px;font-size:10px;font-weight:900;letter-spacing:.16em;cursor:pointer}
+.intro-skip:hover{color:white;border-color:var(--orange)}
+@keyframes markIn{to{transform:rotate(45deg) scale(1)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes charIn{to{opacity:1;transform:none}}
+@keyframes ballDrop{0%{opacity:1;transform:translateY(0)}55%{opacity:1;transform:translateY(78vh)}72%{transform:translateY(64vh) scale(1.04,.92)}86%{transform:translateY(78vh) scale(.98,1.02)}100%{opacity:1;transform:translateY(78vh)}}
+@keyframes arcDraw{to{stroke-dashoffset:0}}
+@keyframes panelUp{to{transform:translateY(-102%)}}
+@keyframes panelDown{to{transform:translateY(102%)}}
+
+/* ---------- chrome ---------- */
+.site-header{position:fixed;z-index:50;left:0;right:0;top:0;height:72px;display:flex;align-items:center;border-bottom:1px solid rgba(242,237,226,.14);background:rgba(17,28,53,.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);color:var(--paper)}
+.header-inner{width:min(var(--max),calc(100% - 48px));margin:auto;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:13px;font-size:14px;font-weight:900;letter-spacing:.13em}
+.brand-mark{width:32px;height:32px;border:2px solid var(--orange);position:relative;transform:rotate(45deg)}
+.brand-mark::after{content:"";position:absolute;width:8px;height:8px;right:3px;bottom:3px;background:var(--orange)}
+.nav{display:flex;gap:30px;font-size:12px;font-weight:800;letter-spacing:.09em;color:rgba(242,237,226,.72)}
+.nav a:hover{color:white}
+.header-cta{border:1px solid rgba(242,237,226,.42);padding:9px 14px;font-size:11px;font-weight:900;letter-spacing:.12em}
+.hero{min-height:850px;height:100vh;max-height:980px;background:var(--deep);color:var(--paper);position:relative;overflow:hidden;display:flex;align-items:center;padding-top:72px}
+.hero::before{content:"";position:absolute;inset:0;opacity:.2;background-image:linear-gradient(rgba(255,255,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.07) 1px,transparent 1px);background-size:42px 42px;mask-image:linear-gradient(to bottom,black,transparent 92%)}
+.hero::after{content:"";position:absolute;width:780px;height:780px;border:2px dashed rgba(232,112,26,.35);border-radius:50%;right:-320px;top:80px}
+.hero-inner{position:relative;z-index:2;width:min(var(--max),calc(100% - 48px));margin:auto;display:grid;grid-template-columns:1.03fr .97fr;align-items:center;gap:72px}
+.eyebrow{display:flex;align-items:center;gap:12px;color:#ff9b58;font-size:11px;font-weight:900;letter-spacing:.3em;margin-bottom:26px}
+.eyebrow::before{content:"";width:42px;height:3px;background:var(--orange)}
+.hero h1{font-size:clamp(72px,8.3vw,128px);line-height:.83;letter-spacing:-.065em;text-shadow:0 24px 50px rgba(0,0,0,.25)}
+.hero h1 span{display:block;color:#ff8140;margin-left:.48em;margin-top:.16em}
+.hero-copy{max-width:530px;margin-top:34px;font-size:16px;line-height:1.9;color:rgba(242,237,226,.68)}
+.hero-actions{display:flex;gap:12px;margin-top:34px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 21px;border:1px solid rgba(242,237,226,.34);background:transparent;color:var(--paper);font-size:12px;font-weight:900;letter-spacing:.1em;cursor:pointer;transition:transform .2s,background .2s}
+.btn.primary{background:var(--orange);border-color:var(--orange);color:#111827}
+.btn:hover{transform:translateY(-2px)}
+.hero-stats{display:flex;gap:34px;margin-top:50px}
+.stat b{display:block;font:900 32px/1 "Noto Serif SC","Songti SC",serif;color:white}.stat span{display:block;margin-top:8px;font-size:10px;color:rgba(242,237,226,.5);letter-spacing:.12em}
+.atlas{height:590px;position:relative;perspective:1100px;transform-style:preserve-3d}
+.atlas-shadow{position:absolute;width:500px;height:150px;right:-20px;bottom:15px;border-radius:50%;background:rgba(0,0,0,.48);filter:blur(36px);transform:rotateX(72deg)}
+.atlas-card{position:absolute;width:340px;height:450px;right:55px;top:48px;border:1px solid rgba(255,255,255,.22);box-shadow:0 35px 60px rgba(0,0,0,.32);transform-style:preserve-3d;padding:34px;overflow:hidden}
+.atlas-card.back{background:#294064;transform:translate3d(-105px,50px,-130px) rotateY(18deg) rotateZ(-8deg);opacity:.7}
+.atlas-card.mid{background:#0E9A6E;transform:translate3d(65px,15px,-55px) rotateY(-15deg) rotateZ(8deg);opacity:.84}
+.atlas-card.front{background:var(--paper);color:var(--navy);transform:translateZ(70px) rotateY(-4deg) rotateZ(-2deg)}
+.atlas-card .small{font-size:10px;font-weight:900;letter-spacing:.22em;opacity:.72}
+.atlas-card h2{font-size:70px;line-height:.92;margin-top:38px;letter-spacing:-.06em}.atlas-card h2 span{color:var(--orange)}
+.atlas-line{height:1px;background:currentColor;opacity:.2;margin:26px 0}
+.atlas-list{display:grid;gap:14px;font-size:13px;font-weight:800}
+.atlas-list div{display:flex;justify-content:space-between;border-bottom:1px solid rgba(27,42,74,.12);padding-bottom:10px}.atlas-list i{font-style:normal;color:var(--orange);font:900 10px/1 ui-monospace,monospace}
+.orb{position:absolute;border-radius:50%;z-index:4;pointer-events:none}.orb.one{width:116px;height:116px;right:-8px;top:38px;background:var(--orange);box-shadow:inset -25px -20px 30px rgba(110,36,0,.25),0 28px 40px rgba(0,0,0,.3)}.orb.two{width:34px;height:34px;left:6px;bottom:72px;background:white;box-shadow:0 18px 28px rgba(0,0,0,.35)}
+.scroll-hint{position:absolute;z-index:3;left:50%;bottom:24px;transform:translateX(-50%);font:800 9px/1 ui-monospace,monospace;letter-spacing:.2em;color:rgba(242,237,226,.45)}
+.scroll-hint::after{content:"";display:block;width:1px;height:30px;background:var(--orange);margin:10px auto 0}
+.section{padding:120px 0}
+.container{width:min(var(--max),calc(100% - 48px));margin:auto}
+.section-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:48px}
+.section-kicker{font-size:10px;font-weight:900;letter-spacing:.25em;color:var(--orange);margin-bottom:13px}.section-title{font-size:clamp(44px,5.3vw,76px);line-height:.95;color:var(--navy)}
+.section-intro{max-width:440px;font-size:13px;line-height:1.8;color:var(--muted)}
+.featured{background:#ebe4d7}
+.featured-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.club-card{--accent:var(--orange);min-height:460px;background:var(--paper);border:1px solid var(--line);padding:32px;position:relative;overflow:hidden;transform-style:preserve-3d;transition:transform .2s ease-out,box-shadow .2s;cursor:pointer}
+.club-card:hover{box-shadow:0 30px 55px rgba(27,42,74,.16)}
+.card-top{display:flex;align-items:center;justify-content:space-between;position:relative;z-index:2}.card-no{font:900 11px/1 ui-monospace,monospace;color:var(--accent)}.card-tag{border:1px solid var(--accent);color:var(--accent);padding:6px 8px;font-size:9px;font-weight:900;letter-spacing:.14em}
+.club-card h3{position:relative;z-index:2;font-size:58px;line-height:.94;margin-top:56px;color:var(--navy)}.club-card h3 span{display:block;color:var(--accent);margin-left:1em}
+.card-copy{position:relative;z-index:2;max-width:420px;font-size:13px;line-height:1.75;color:var(--muted);margin-top:22px}
+.card-meta{position:absolute;z-index:2;left:32px;right:32px;bottom:32px;display:flex;align-items:flex-end;justify-content:space-between;border-top:1px solid var(--line);padding-top:20px}.card-meta b{display:block;font-size:18px;color:var(--navy)}.card-meta span{display:block;font-size:10px;color:var(--muted);margin-top:5px}.card-link{border:0;background:transparent;color:var(--accent);font-size:11px;font-weight:900;letter-spacing:.12em;cursor:pointer}
+.card-art{position:absolute;width:230px;height:230px;border-radius:50%;right:-45px;top:84px;background:var(--accent);opacity:.13;transform:translateZ(30px)}
+.card-art::before{content:"";position:absolute;inset:28px;border:2px dashed var(--accent);border-radius:50%;transform:scale(1.4)}
+.club-browser{background:var(--paper)}
+.browser-tools{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:20px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-bottom:34px}
+.filters{display:flex;flex-wrap:wrap;gap:8px}
+.filter-btn{min-height:38px;padding:0 14px;border:1px solid var(--line);background:transparent;color:var(--navy);font-size:10px;font-weight:900;letter-spacing:.1em;cursor:pointer}
+.filter-btn.active{background:var(--navy);border-color:var(--navy);color:white}
+.search-box{position:relative;width:min(330px,100%)}
+.search-box input{width:100%;height:42px;border:0;border-bottom:1px solid var(--navy);background:transparent;color:var(--navy);padding:0 34px 0 3px;outline:none;font-size:12px}
+.search-box::after{content:"";position:absolute;right:5px;top:10px;width:14px;height:14px;border:2px solid var(--navy);border-radius:50%}
+.search-box::before{content:"";position:absolute;right:2px;top:25px;width:8px;height:2px;background:var(--navy);transform:rotate(45deg)}
+.result-line{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;font-size:10px;color:var(--muted);letter-spacing:.08em}.result-line b{color:var(--orange);font:900 12px/1 ui-monospace,monospace}
+.clubs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.mini-card{--accent:var(--orange);min-height:320px;background:#ece5d8;border:1px solid transparent;padding:24px;position:relative;overflow:hidden;cursor:pointer;transform-style:preserve-3d;transition:transform .18s ease-out,box-shadow .2s,border-color .2s}
+.mini-card:hover{border-color:var(--accent);box-shadow:0 24px 42px rgba(27,42,74,.13)}
+.mini-card.ready{background:var(--navy);color:white}
+.mini-card-top{display:flex;justify-content:space-between;align-items:center;position:relative;z-index:2}.mini-index{font:900 10px/1 ui-monospace,monospace;color:var(--accent)}.mini-status{font-size:8px;font-weight:900;letter-spacing:.12em;color:var(--muted)}.ready .mini-status{color:rgba(255,255,255,.52)}
+.mini-card h3{position:relative;z-index:2;font-size:32px;line-height:1.05;margin-top:58px;max-width:75%;color:var(--navy)}.ready h3{color:white}.mini-card h3 span{display:block;color:var(--accent);font-size:18px;margin-top:9px}
+.mini-info{position:absolute;z-index:2;left:24px;right:24px;bottom:24px;border-top:1px solid rgba(27,42,74,.16);padding-top:14px;font-size:10px;line-height:1.6;color:var(--muted)}.ready .mini-info{border-top-color:rgba(255,255,255,.17);color:rgba(255,255,255,.56)}
+.mini-shape{position:absolute;right:-30px;top:46px;width:150px;height:150px;border:20px solid var(--accent);border-radius:50%;opacity:.16;transform:translateZ(28px)}
+.mini-card[data-group="健身户外"] .mini-shape{border-radius:0;transform:translateZ(28px) rotate(28deg)}
+.mini-card[data-group="文化生活"] .mini-shape{border-radius:50% 0 50% 0;transform:translateZ(28px) rotate(18deg)}
+.mini-card[data-group="公益志愿"] .mini-shape{border-radius:0 50% 0 50%;transform:translateZ(28px) rotate(-12deg)}
+.no-results{display:none;padding:72px 0;text-align:center;border-top:1px solid var(--line);border-bottom:1px solid var(--line);color:var(--muted);font-size:13px}.no-results.show{display:block}
+.schedule{background:var(--deep);color:var(--paper);position:relative;overflow:hidden}
+.schedule::after{content:"WEEK";position:absolute;right:-40px;top:65px;font:900 260px/1 "Noto Serif SC","Songti SC",serif;color:rgba(255,255,255,.025);pointer-events:none}
+.schedule .section-title{color:white}.schedule .section-intro{color:rgba(242,237,226,.58)}
+.week-board{position:relative;z-index:2;border-top:1px solid rgba(255,255,255,.17)}
+.day-row{display:grid;grid-template-columns:130px 1fr;align-items:stretch;min-height:96px;border-bottom:1px solid rgba(255,255,255,.13)}
+.day-name{display:flex;align-items:center;font:900 22px/1 "Noto Serif SC","Songti SC",serif;color:rgba(255,255,255,.38)}
+.day-events{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:14px 0}
+.event{--accent:var(--orange);min-width:230px;flex:1 1 230px;padding:15px 18px;border-left:3px solid var(--accent);background:rgba(255,255,255,.055);display:flex;align-items:center;justify-content:space-between;gap:16px}
+.event.empty{border-left-color:rgba(255,255,255,.14);background:transparent;color:rgba(255,255,255,.22);min-width:180px}
+.event b{font-size:13px}.event span{display:block;font-size:9px;line-height:1.5;color:rgba(255,255,255,.5);margin-top:4px}.event time{font:900 11px/1 ui-monospace,monospace;color:var(--accent);white-space:nowrap}
+.join-section{background:#e8dfd0}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.step{min-height:310px;padding:34px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);position:relative;overflow:hidden}
+.step-no{font:900 12px/1 ui-monospace,monospace;color:var(--orange)}
+.step h3{font-size:31px;color:var(--navy);margin-top:72px}.step p{font-size:12px;line-height:1.8;color:var(--muted);margin-top:17px;max-width:270px}
+.step::after{content:attr(data-step);position:absolute;right:-7px;bottom:-35px;font:900 150px/1 "Noto Serif SC","Songti SC",serif;color:rgba(27,42,74,.045)}
+.site-footer{background:#0b1325;color:rgba(242,237,226,.62);padding:60px 0 34px}
+.footer-top{display:flex;justify-content:space-between;gap:50px;align-items:flex-end;padding-bottom:46px;border-bottom:1px solid rgba(255,255,255,.13)}
+.footer-title{font-size:48px;line-height:1;color:white}.footer-title span{color:var(--orange)}.footer-note{max-width:430px;font-size:11px;line-height:1.8}
+.footer-bottom{display:flex;justify-content:space-between;gap:20px;padding-top:22px;font-size:9px;letter-spacing:.1em}
+.footer-bottom a{text-decoration:underline;text-underline-offset:3px}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}.reveal.visible{opacity:1;transform:none}
+#progress{position:fixed;z-index:90;left:0;top:0;height:3px;width:0;background:var(--orange)}
+.club-dialog{width:min(1120px,calc(100% - 40px));max-height:calc(100vh - 40px);border:0;background:transparent;color:var(--ink);padding:0;margin:auto;box-shadow:0 50px 120px rgba(0,0,0,.45)}
+.club-dialog::backdrop{background:rgba(7,12,24,.78);backdrop-filter:blur(8px)}
+.dialog-shell{--accent:var(--orange);display:grid;grid-template-columns:.92fr 1.08fr;min-height:650px;background:var(--paper)}
+.dialog-visual{background:var(--navy);color:white;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;padding:48px}
+.dialog-visual.typo::before{content:"";position:absolute;width:380px;height:380px;right:-190px;top:120px;border:44px solid var(--accent);border-radius:50%;opacity:.22}
+.dialog-visual.has-poster{padding:0;background:#0d1526;justify-content:center;align-items:center;cursor:zoom-in}
+.dialog-visual.has-poster img{width:100%;height:100%;max-height:calc(100vh - 40px);object-fit:contain;display:block}
+.poster-hint{position:absolute;left:14px;bottom:12px;background:rgba(7,12,24,.72);color:rgba(255,255,255,.85);font-size:10px;letter-spacing:.1em;padding:7px 12px;pointer-events:none}
+.dialog-num{font:900 11px/1 ui-monospace,monospace;color:var(--accent);letter-spacing:.18em}.dialog-visual h2{position:relative;font-size:66px;line-height:.92}.dialog-visual h2 span{display:block;color:var(--accent);margin-left:.6em}.dialog-motto{position:relative;font-size:11px;letter-spacing:.15em;color:rgba(255,255,255,.58)}
+.dialog-body{padding:48px 48px 38px;position:relative;overflow-y:auto}
+.dialog-close{position:absolute;right:20px;top:18px;width:38px;height:38px;border:1px solid var(--line);background:var(--paper);color:var(--navy);font-size:24px;line-height:1;cursor:pointer;z-index:3}
+.dialog-subtitle{max-width:580px;font-size:16px;line-height:1.8;color:#555f6e;padding-right:35px}
+.dialog-meta{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);margin:28px 0}.meta-box{background:var(--paper);padding:18px}.meta-box small{display:block;font-size:8px;letter-spacing:.18em;color:var(--muted);margin-bottom:7px}.meta-box b{font-size:14px;color:var(--navy);line-height:1.5}
+.dialog-body h3{font-size:18px;color:var(--navy);margin:24px 0 13px}.activity-list{display:grid;grid-template-columns:1fr 1fr;gap:8px}.activity-item{padding:12px 14px;background:#e8e0d2;font-size:11px;color:var(--navy)}.activity-item i{font-style:normal;color:var(--accent);font:900 9px/1 ui-monospace,monospace;margin-right:8px}
+.join-panel{margin-top:26px;background:var(--navy);color:white;padding:22px;position:relative}.join-panel strong{font-size:18px}.join-panel p{font-size:11px;line-height:1.7;color:rgba(255,255,255,.62);margin-top:8px}.join-panel .contact-line{display:block;font-size:11px;color:white;margin-top:8px}.join-panel .qr-cue{display:inline-flex;align-items:center;gap:8px;margin-top:14px;border:1px solid var(--accent);color:var(--accent);padding:8px 12px;font-size:10px;font-weight:900;letter-spacing:.1em}
+.join-panel.pending::after{content:"社团资料待补";position:absolute;right:22px;top:22px;border:1px solid rgba(255,255,255,.3);padding:8px 10px;font-size:9px;letter-spacing:.13em;color:var(--accent)}
+body.dialog-open{overflow:hidden}
+#zoomLayer{position:fixed;inset:0;z-index:300;background:rgba(7,12,24,.94);display:none;align-items:center;justify-content:center;cursor:zoom-out}
+#zoomLayer.show{display:flex}
+#zoomLayer img{max-width:96vw;max-height:96vh;object-fit:contain}
+@media(max-width:1020px){.clubs-grid{grid-template-columns:repeat(2,1fr)}.dialog-shell{grid-template-columns:.8fr 1.2fr}.dialog-visual{padding:34px}.dialog-visual h2{font-size:54px}}
+@media(max-width:900px){.nav{display:none}.hero{height:auto;max-height:none;padding:130px 0 80px}.hero-inner{grid-template-columns:1fr}.atlas{height:520px}.featured-grid{grid-template-columns:1fr}.section-head{display:block}.section-intro{margin-top:24px}.hero h1{font-size:clamp(64px,18vw,96px)}.browser-tools{align-items:stretch;flex-direction:column}.search-box{width:100%}.day-row{grid-template-columns:90px 1fr}.steps{grid-template-columns:1fr}.step{min-height:240px}.step h3{margin-top:45px}.footer-top{display:block}.footer-note{margin-top:24px}.dialog-shell{display:block}.dialog-visual.typo{min-height:300px}.dialog-visual.has-poster{min-height:60vh}.club-dialog{overflow-y:auto}.dialog-body{overflow:visible}}
+@media(max-width:620px){.clubs-grid{grid-template-columns:1fr}.day-row{grid-template-columns:1fr;padding:14px 0}.day-name{margin-bottom:4px}.activity-list{grid-template-columns:1fr}.dialog-body{padding:34px 22px 26px}.dialog-meta{grid-template-columns:1fr}.dialog-visual{padding:28px}.dialog-visual h2{font-size:48px}.footer-bottom{display:block}.footer-bottom span{display:block;margin-top:10px}.intro-ball{margin-left:90px;width:54px;height:54px}}
+@media(max-width:560px){.header-inner,.hero-inner,.container{width:min(100% - 30px,var(--max))}.site-header{height:62px}.header-cta{display:none}.hero{padding-top:108px}.hero h1{font-size:61px}.hero-copy{font-size:14px}.hero-actions{flex-direction:column}.hero-stats{gap:18px}.atlas{height:420px;transform:scale(.78);transform-origin:top center;margin-bottom:-80px}.atlas-card{right:50%;margin-right:-170px}.section{padding:80px 0}.section-title{font-size:44px}.club-card{min-height:430px;padding:24px}.club-card h3{font-size:48px}.card-meta{left:24px;right:24px}.orb{display:none}.footer-title{font-size:38px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important;animation:none!important}#intro{display:none}}
+</style>
+</head>
+<body>
+<div id="intro" aria-hidden="true">
+  <div class="panel t"></div><div class="panel b"></div>
+  <div class="intro-stage">
+    <div class="intro-mark"></div>
+    <div class="intro-kicker">员工社团招新计划 · 2026</div>
+    <h1 class="intro-title serif" id="introTitle"></h1>
+    <div class="intro-sub">CLUB ATLAS · 与同路人相遇</div>
+  </div>
+  <div class="intro-ball"></div>
+  <svg class="intro-arc" width="100%" height="180" viewBox="0 0 1200 180" preserveAspectRatio="none" fill="none">
+    <path d="M -20 170 Q 600 -60 1220 150" stroke="#E8701A" stroke-width="4" stroke-linecap="round"/>
+  </svg>
+  <button class="intro-skip" id="introSkip" type="button">跳过 →</button>
+</div>
+
+<header class="site-header"><div class="header-inner"><a class="brand" href="#top"><span class="brand-mark" aria-hidden="true"></span><span>员工社团 · CLUBS 2026</span></a><nav class="nav" aria-label="主导航"><a href="#featured">精选社团</a><a href="#all-clubs">发现社团</a><a href="#schedule">活动安排</a></nav><a class="header-cta" href="#featured">开始探索</a></div></header>
+<main id="top">
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-copybox"><div class="eyebrow">员工社团招新计划</div><h1 class="serif">把热爱<span>搬进日常</span></h1><p class="hero-copy">不再翻阅一张张海报。这里是一座属于员工的兴趣展馆：找到同频伙伴，查看固定活动，加入下一场相聚。</p><div class="hero-actions"><a class="btn primary" href="#featured">浏览社团</a><a class="btn" href="#schedule">查看活动</a></div><div class="hero-stats" id="heroStats"></div></div>
+      <div class="atlas" aria-hidden="true"><div class="atlas-shadow"></div><div class="atlas-card back"></div><div class="atlas-card mid"></div><div class="atlas-card front"><div class="small">CLUB ATLAS · 2026</div><h2 class="serif">兴趣<br><span>坐标</span></h2><div class="atlas-line"></div><div class="atlas-list" id="atlasList"></div></div><i class="orb one"></i><i class="orb two"></i></div>
+    </div><div class="scroll-hint">SCROLL TO EXPLORE</div>
+  </section>
+  <section class="section featured" id="featured"><div class="container"><header class="section-head"><div><div class="section-kicker">FEATURED CLUBS</div><h2 class="section-title serif">本季主推<br>先睹为快</h2></div><p class="section-intro">点击卡片查看社团详情和完整海报，扫描海报上的二维码即可加入。</p></header><div class="featured-grid" id="featuredGrid"></div></div></section>
+  <section class="section club-browser" id="all-clubs"><div class="container"><header class="section-head reveal"><div><div class="section-kicker">EXPLORE ALL CLUBS</div><h2 class="section-title serif">寻找你的<br>兴趣坐标</h2></div><p class="section-intro">按类别或关键词筛选全部社团。资料尚未收齐的社团会明确标注"待补"，不虚构活动信息。</p></header><div class="browser-tools reveal"><div class="filters" role="group" aria-label="社团分类" id="filterBar"></div><label class="search-box"><span style="position:absolute;clip:rect(0 0 0 0)">搜索社团</span><input id="clubSearch" type="search" placeholder="搜索社团、地点或时间" autocomplete="off"></label></div><div class="result-line"><span>当前结果</span><span><b id="resultCount">0</b> 个社团</span></div><div class="clubs-grid" id="clubsGrid"></div><div class="no-results" id="noResults">没有找到匹配的社团，请更换关键词或分类。</div></div></section>
+  <section class="section schedule" id="schedule"><div class="container"><header class="section-head reveal"><div><div class="section-kicker">WEEKLY SCHEDULE</div><h2 class="section-title serif">这一周<br>什么时候见</h2></div><p class="section-intro">按各协会提供的固定活动时间生成。未列出固定时间的社团以群内通知为准。</p></header><div class="week-board reveal" id="weekBoard"></div></div></section>
+  <section class="section join-section" id="join"><div class="container"><header class="section-head reveal"><div><div class="section-kicker">HOW TO JOIN</div><h2 class="section-title serif">从感兴趣<br>到一起上场</h2></div><p class="section-intro">三步加入：选社团、看安排、扫海报上的二维码。</p></header><div class="steps reveal"><article class="step" data-step="1"><span class="step-no">STEP 01</span><h3 class="serif">先选兴趣</h3><p>通过分类和搜索快速找到社团，不需要逐页翻阅全部内容。</p></article><article class="step" data-step="2"><span class="step-no">STEP 02</span><h3 class="serif">再看安排</h3><p>在详情中核对时间、地点、活动内容和适合人群，判断是否合适。</p></article><article class="step" data-step="3"><span class="step-no">STEP 03</span><h3 class="serif">扫码加入</h3><p>打开社团详情里的海报，用微信扫描海报上的二维码进群或联系负责人。</p></article></div></div></section>
+</main>
+<footer class="site-footer"><div class="container"><div class="footer-top"><h2 class="footer-title serif">让工作之外<br>也有<span>同路人</span></h2><p class="footer-note">本页面仅用于公司内部员工社团招新。社团信息以各协会确认版本为准，未确认内容均明确标注待补。</p></div><div class="footer-bottom"><span>员工社团招新计划 · 2026</span><span>INTERNAL USE ONLY · <a href="/admin">管理入口</a> · <a href="/logout">退出</a></span></div></div></footer>
+<div id="progress" aria-hidden="true"></div>
+<dialog class="club-dialog" id="clubDialog" aria-labelledby="dialogTitle"><div class="dialog-shell" id="dialogShell"><section class="dialog-visual" id="dialogVisual"></section><section class="dialog-body"><button class="dialog-close" id="dialogClose" type="button" aria-label="关闭详情">×</button><p class="dialog-subtitle" id="dialogSubtitle"></p><div class="dialog-meta" id="dialogMeta"></div><h3>主要活动</h3><div class="activity-list" id="dialogActivities"></div><div class="join-panel" id="joinPanel"><strong id="dialogJoin"></strong><p id="dialogJoinSub"></p><span class="contact-line" id="dialogContact"></span><span class="qr-cue" id="qrCue"></span></div></section></div></dialog>
+<div id="zoomLayer"><img id="zoomImg" alt="社团海报大图"></div>
+<script>
+(function(){
+  "use strict";
+  var clubs = "__CLUBS_JSON__";
+  var DAY_NAMES = ["","周一","周二","周三","周四","周五","周六","周日"];
+  var grid=document.getElementById("clubsGrid"),search=document.getElementById("clubSearch"),resultCount=document.getElementById("resultCount"),noResults=document.getElementById("noResults"),dialog=document.getElementById("clubDialog"),dialogShell=document.getElementById("dialogShell"),activeFilter="全部",reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function esc(value){return String(value==null?"":value).replace(/[&<>\"]/g,function(ch){return({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"})[ch];});}
+
+  /* ---- opening animation ---- */
+  (function intro(){
+    var el=document.getElementById("intro");
+    var seen=false;try{seen=sessionStorage.getItem("intro_seen")==="1";}catch(e){}
+    if(reduced||seen){el.className="done";return;}
+    var title="把热爱搬进日常",box=document.getElementById("introTitle");
+    for(var i=0;i<title.length;i++){var s=document.createElement("span");s.textContent=title[i];s.style.animationDelay=(0.65+i*0.09)+"s";box.appendChild(s);}
+    function leave(){
+      if(el.className)return;
+      el.className="leave";
+      try{sessionStorage.setItem("intro_seen","1");}catch(e){}
+      setTimeout(function(){el.className="done";},900);
+    }
+    document.getElementById("introSkip").addEventListener("click",leave);
+    setTimeout(leave,3400);
+  })();
+
+  /* ---- hero stats + atlas ---- */
+  (function heroBits(){
+    var groups={},ready=0;
+    clubs.forEach(function(c){groups[c.group]=(groups[c.group]||0)+1;if(c.hasPoster)ready++;});
+    var gnames=Object.keys(groups);
+    document.getElementById("heroStats").innerHTML=
+      '<div class="stat"><b>'+clubs.length+'</b><span>社团总数</span></div>'+
+      '<div class="stat"><b>'+String(gnames.length).padStart(2,"0")+'</b><span>兴趣类别</span></div>'+
+      '<div class="stat"><b>'+String(ready).padStart(2,"0")+'</b><span>海报就绪</span></div>';
+    var idx=1,html="";
+    gnames.forEach(function(g){var n=groups[g];html+='<div><span>'+esc(g)+'</span><i>'+String(idx).padStart(2,"0")+'—'+String(idx+n-1).padStart(2,"0")+'</i></div>';idx+=n;});
+    document.getElementById("atlasList").innerHTML=html;
+    var bar=document.getElementById("filterBar");
+    bar.innerHTML='<button class="filter-btn active" type="button" data-filter="全部">全部社团</button>'+gnames.map(function(g){return '<button class="filter-btn" type="button" data-filter="'+esc(g)+'">'+esc(g)+'</button>';}).join("");
+    bar.addEventListener("click",function(e){
+      var btn=e.target.closest(".filter-btn");if(!btn)return;
+      activeFilter=btn.dataset.filter;
+      bar.querySelectorAll(".filter-btn").forEach(function(b){b.classList.toggle("active",b===btn);});
+      render();
+    });
+  })();
+
+  /* ---- featured ---- */
+  (function featured(){
+    var list=clubs.map(function(c,i){return{c:c,i:i};}).filter(function(x){return x.c.featured;}).slice(0,2);
+    document.getElementById("featuredGrid").innerHTML=list.map(function(x){
+      var c=x.c;
+      return '<article class="club-card" style="--accent:'+esc(c.color)+'" data-index="'+x.i+'"><div class="card-top"><span class="card-no">'+String(x.i+1).padStart(2,"0")+' / '+esc(c.group)+'</span><span class="card-tag">'+esc(c.name)+'</span></div><h3 class="serif">'+esc(c.titleA)+'<span>'+esc(c.titleB)+'</span></h3><p class="card-copy">'+esc(c.subtitle)+'</p><div class="card-art"></div><div class="card-meta"><div><b>'+esc(c.time||"时间待定")+'</b><span>'+esc(c.venue||"地点见群内通知")+'</span></div><button class="card-link" type="button">查看详情 →</button></div></article>';
+    }).join("");
+    document.getElementById("featuredGrid").addEventListener("click",function(e){
+      var card=e.target.closest(".club-card");if(card)openClub(Number(card.dataset.index));
+    });
+  })();
+
+  /* ---- grid ---- */
+  function cardHTML(c,i){return '<article class="mini-card '+(c.ready?'ready':'pending')+'" style="--accent:'+esc(c.color)+'" data-index="'+i+'" data-group="'+esc(c.group)+'" tabindex="0" role="button" aria-label="查看 '+esc(c.name)+' 详情"><div class="mini-card-top"><span class="mini-index">'+String(i+1).padStart(2,"0")+' / '+clubs.length+'</span><span class="mini-status">'+(c.hasPoster?'海报已就绪':(c.ready?'资料已就绪':'[资料待补]'))+'</span></div><h3 class="serif">'+esc(c.name)+'<span>'+esc(c.motto||c.group)+'</span></h3><div class="mini-shape" aria-hidden="true"></div><p class="mini-info">'+esc(c.time?c.time+(c.venue?' · '+c.venue:''):(c.venue||'[时间地点] [待补]'))+'</p></article>';}
+  function bindTilt(nodes){Array.prototype.forEach.call(nodes,function(card){card.addEventListener("pointermove",function(e){if(reduced)return;var r=card.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;card.style.transform="perspective(900px) rotateX("+(-y*4).toFixed(2)+"deg) rotateY("+(x*5).toFixed(2)+"deg) translateY(-3px)";});card.addEventListener("pointerleave",function(){card.style.transform="";});});}
+  function render(){var q=search.value.trim().toLowerCase(),list=clubs.map(function(c,i){return{c:c,i:i};}).filter(function(item){var c=item.c,hay=(c.name+" "+c.group+" "+(c.time||"")+" "+(c.venue||"")).toLowerCase();return(activeFilter==="全部"||c.group===activeFilter)&&(!q||hay.indexOf(q)>-1);});grid.innerHTML=list.map(function(item){return cardHTML(item.c,item.i);}).join("");resultCount.textContent=list.length;noResults.classList.toggle("show",list.length===0);bindTilt(grid.querySelectorAll(".mini-card"));}
+
+  /* ---- schedule ---- */
+  (function week(){
+    var byDay={};
+    clubs.forEach(function(c){(c.schedule||[]).forEach(function(s){(byDay[s.d]=byDay[s.d]||[]).push({c:c,s:s});});});
+    var days=[1,2,3,4,5,6,7].filter(function(d){return d<=5||byDay[d];});
+    document.getElementById("weekBoard").innerHTML=days.map(function(d){
+      var evs=byDay[d]||[];
+      var inner=evs.length?evs.map(function(e){return '<div class="event" style="--accent:'+esc(e.c.color)+'"><div><b>'+esc(e.s.label)+'</b><span>'+esc(e.c.venue||e.c.name)+'</span></div><time>'+esc(e.s.t)+'</time></div>';}).join(""):'<div class="event empty"><div><b>暂无固定安排</b></div></div>';
+      return '<div class="day-row"><div class="day-name">'+DAY_NAMES[d]+'</div><div class="day-events">'+inner+'</div></div>';
+    }).join("");
+  })();
+
+  /* ---- dialog ---- */
+  function openClub(index){var c=clubs[index];if(!c)return;
+    dialogShell.style.setProperty("--accent",c.color);
+    var vis=document.getElementById("dialogVisual");
+    if(c.hasPoster){
+      vis.className="dialog-visual has-poster";
+      vis.innerHTML='<img src="/poster/'+esc(c.slug)+'.jpg" alt="'+esc(c.name)+'宣传海报"><span class="poster-hint">点击查看大图 · 扫描海报上的二维码加入</span>';
+    }else{
+      vis.className="dialog-visual typo";
+      vis.innerHTML='<div class="dialog-num">'+String(index+1).padStart(2,"0")+' / '+clubs.length+' · '+esc(c.group)+'</div><h2 class="serif">'+esc(c.titleA)+'<span>'+esc(c.titleB)+'</span></h2><p class="dialog-motto">'+esc(c.name)+(c.motto?' · '+esc(c.motto):'')+'</p>';
+    }
+    document.getElementById("dialogSubtitle").textContent=c.subtitle||"该社团的介绍尚未确认。";
+    var meta='<div class="meta-box"><small>活动时间</small><b>'+esc(c.time||"[待补]")+'</b></div><div class="meta-box"><small>活动地点</small><b>'+esc(c.venue||"[待补]")+'</b></div>';
+    if(c.president)meta+='<div class="meta-box"><small>会长</small><b>'+esc(c.president)+'</b></div><div class="meta-box"><small>副会长</small><b>'+esc(c.vicePresidents||"—")+'</b></div>';
+    document.getElementById("dialogMeta").innerHTML=meta;
+    document.getElementById("dialogActivities").innerHTML=(c.activities&&c.activities.length?c.activities:["[活动内容] [待补]"]).map(function(a,i){return'<div class="activity-item"><i>'+String(i+1).padStart(2,"0")+'</i>'+esc(a)+'</div>';}).join("");
+    document.getElementById("dialogJoin").textContent=c.join||(c.ready?"欢迎加入 "+c.name:"加入方式待补");
+    document.getElementById("dialogJoinSub").textContent=c.joinSub||"";
+    document.getElementById("dialogContact").textContent=c.contact||"";
+    var cue=document.getElementById("qrCue");
+    if(c.hasPoster){cue.style.display="";cue.textContent=c.qrType==="个人"?"↗ 扫描左侧海报上的二维码，添加负责人":"↗ 扫描左侧海报上的二维码，直接进群";}
+    else{cue.style.display="none";}
+    document.getElementById("joinPanel").classList.toggle("pending",!c.ready);
+    document.body.classList.add("dialog-open");
+    if(typeof dialog.showModal==="function")dialog.showModal();else dialog.setAttribute("open","");
+    if(c.hasPoster){vis.onclick=function(){var z=document.getElementById("zoomLayer");document.getElementById("zoomImg").src="/poster/"+c.slug+".jpg";z.className="show";};}else{vis.onclick=null;}
+  }
+  function closeDialog(){if(typeof dialog.close==="function"&&dialog.open)dialog.close();else dialog.removeAttribute("open");document.body.classList.remove("dialog-open");}
+  document.getElementById("zoomLayer").addEventListener("click",function(){this.className="";document.getElementById("zoomImg").src="";});
+  search.addEventListener("input",render);
+  grid.addEventListener("click",function(e){var card=e.target.closest(".mini-card");if(card)openClub(Number(card.dataset.index));});
+  grid.addEventListener("keydown",function(e){var card=e.target.closest(".mini-card");if(card&&(e.key==="Enter"||e.key===" ")){e.preventDefault();openClub(Number(card.dataset.index));}});
+  document.getElementById("dialogClose").addEventListener("click",closeDialog);
+  dialog.addEventListener("click",function(e){if(e.target===dialog)closeDialog();});
+  dialog.addEventListener("close",function(){document.body.classList.remove("dialog-open");});
+  var atlas=document.querySelector(".atlas");
+  window.addEventListener("pointermove",function(e){if(!atlas||reduced)return;var x=e.clientX/window.innerWidth-.5,y=e.clientY/window.innerHeight-.5;atlas.style.transform="rotateX("+(-y*3).toFixed(2)+"deg) rotateY("+(x*4).toFixed(2)+"deg)";},{passive:true});
+  window.addEventListener("scroll",function(){var max=document.documentElement.scrollHeight-innerHeight,ratio=max>0?scrollY/max:0;document.getElementById("progress").style.width=(ratio*100).toFixed(2)+"%";},{passive:true});
+  if("IntersectionObserver" in window){var observer=new IntersectionObserver(function(entries){entries.forEach(function(entry){if(entry.isIntersecting){entry.target.classList.add("visible");observer.unobserve(entry.target);}});},{threshold:.12});document.querySelectorAll(".reveal").forEach(function(el){observer.observe(el);});}else{document.querySelectorAll(".reveal").forEach(function(el){el.classList.add("visible");});}
+  bindTilt(document.querySelectorAll(".club-card"));
+  render();
+})();
+</script>
+</body>
+</html>

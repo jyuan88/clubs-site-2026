@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>社团后台 · 海报管理</title>
+<style>
+:root{--paper:#F2EDE2;--navy:#1B2A4A;--deep:#111C35;--orange:#E8701A;--muted:#6d716f;--line:rgba(27,42,74,.16)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:#17233e;font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;min-height:100vh}
+.serif{font-family:"Noto Serif SC","Songti SC","STSong",serif;font-weight:900}
+header{background:var(--deep);color:var(--paper);padding:22px 0;border-bottom:3px solid var(--orange)}
+.wrap{width:min(1180px,calc(100% - 40px));margin:auto}
+header .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px}
+header h1{font-size:22px;letter-spacing:.12em}
+header nav{display:flex;gap:14px;font-size:11px;font-weight:800;letter-spacing:.08em}
+header a{color:rgba(242,237,226,.75);text-decoration:none;border:1px solid rgba(242,237,226,.3);padding:8px 12px}
+header a:hover{color:white;border-color:var(--orange)}
+main{padding:34px 0 80px}
+.tip{font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:22px}
+.tbl{width:100%;border-collapse:collapse;background:white;border:1px solid var(--line)}
+.tbl th{background:var(--navy);color:white;font-size:11px;letter-spacing:.08em;padding:12px 14px;text-align:left;white-space:nowrap}
+.tbl td{padding:12px 14px;border-bottom:1px solid var(--line);font-size:13px;vertical-align:middle}
+.tbl tr:hover td{background:#faf6ec}
+.chip{display:inline-block;font-size:10px;font-weight:900;letter-spacing:.06em;padding:4px 8px;margin-right:4px}
+.chip.ok{background:#e3efe6;color:#0E9A6E}
+.chip.no{background:#f7e3dc;color:#C2452D}
+.chip.off{background:#e8e2d4;color:var(--muted)}
+.thumb{width:44px;height:60px;object-fit:cover;border:1px solid var(--line);background:#ddd;display:block}
+.nothumb{width:44px;height:60px;border:1px dashed #c9bfa8;display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--muted)}
+button{font:inherit;cursor:pointer}
+.btn{border:1px solid var(--navy);background:transparent;color:var(--navy);font-size:11px;font-weight:900;letter-spacing:.08em;padding:8px 14px}
+.btn.primary{background:var(--navy);color:white}
+.btn.orange{background:var(--orange);border-color:var(--orange);color:#111827}
+.btn:disabled{opacity:.5;cursor:wait}
+dialog{border:0;padding:0;width:min(760px,calc(100% - 32px));margin:auto;box-shadow:0 40px 90px rgba(0,0,0,.4)}
+dialog::backdrop{background:rgba(7,12,24,.7)}
+.form{background:white;padding:28px}
+.form h2{font-size:20px;color:var(--navy);margin-bottom:4px}
+.form .sub{font-size:11px;color:var(--muted);margin-bottom:18px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:10px;font-weight:900;letter-spacing:.1em;color:var(--muted);margin-bottom:5px}
+.field input,.field textarea,.field select{width:100%;border:1px solid var(--line);background:#fbf8f0;padding:9px 10px;font-size:13px;font-family:inherit;outline:none}
+.field input:focus,.field textarea:focus{border-color:var(--orange)}
+.field textarea{min-height:64px;resize:vertical}
+.form-actions{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:18px;border-top:1px solid var(--line);padding-top:16px}
+.poster-box{display:flex;gap:16px;align-items:flex-start;background:#fbf8f0;border:1px solid var(--line);padding:14px;margin-bottom:14px}
+.poster-box img{width:110px;border:1px solid var(--line);display:block}
+.poster-box .nothumb{width:110px;height:150px}
+.poster-meta{font-size:11px;color:var(--muted);line-height:1.8}
+.msg{font-size:12px;min-height:18px;margin-top:10px}
+.msg.ok{color:#0E9A6E}.msg.err{color:#C2452D}
+.checks{display:flex;gap:18px;margin:6px 0 12px}
+.checks label{font-size:12px;display:flex;align-items:center;gap:6px}
+@media(max-width:760px){.grid2{grid-template-columns:1fr}.tbl th:nth-child(4),.tbl td:nth-child(4){display:none}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><h1 class="serif">社团后台 · 海报管理</h1><nav><a href="/">查看前台</a><a href="#" id="reloadBtn">从仓库刷新</a><a href="/logout">退出</a></nav></div></header>
+<main><div class="wrap">
+  <p class="tip">在这里维护各社团的资料与海报：点「编辑」修改文字信息，点「换海报」上传新海报（JPG/PNG，系统会自动压缩到合适大小）。改动即时生效并自动存档到内容仓库。「隐藏」的社团不会出现在前台。</p>
+  <table class="tbl"><thead><tr><th>海报</th><th>社团</th><th>分类</th><th>时间 / 地点</th><th>状态</th><th style="text-align:right">操作</th></tr></thead><tbody id="rows"></tbody></table>
+</div></main>
+
+<dialog id="editDlg"><form class="form" id="editForm" method="dialog">
+  <h2 class="serif" id="efName"></h2>
+  <div class="sub">改完点「保存修改」。带 * 的字段会显示在前台显眼位置。</div>
+  <div class="poster-box">
+    <div id="posterPreview"></div>
+    <div style="flex:1">
+      <div class="poster-meta" id="posterMeta"></div>
+      <div style="margin-top:10px;display:flex;gap:8px;align-items:center">
+        <button type="button" class="btn orange" id="pickPoster">换海报…</button>
+        <input type="file" id="posterFile" accept="image/jpeg,image/png" hidden>
+        <span class="msg" id="posterMsg"></span>
+      </div>
+    </div>
+  </div>
+  <div class="grid2">
+    <div class="field"><label>协会名称 *</label><input name="name" required></div>
+    <div class="field"><label>分类 *</label><select name="group"><option>球类运动</option><option>健身户外</option><option>文化生活</option><option>公益志愿</option></select></div>
+    <div class="field"><label>大标题·上（2-3字） *</label><input name="titleA"></div>
+    <div class="field"><label>大标题·下（2-4字） *</label><input name="titleB"></div>
+    <div class="field"><label>口号</label><input name="motto"></div>
+    <div class="field"><label>主色（如 #E8701A）</label><input name="color" pattern="^#[0-9A-Fa-f]{6}$"></div>
+    <div class="field"><label>活动时间 *</label><input name="time"></div>
+    <div class="field"><label>活动地点 *</label><input name="venue"></div>
+    <div class="field"><label>会长</label><input name="president"></div>
+    <div class="field"><label>副会长</label><input name="vicePresidents"></div>
+    <div class="field"><label>联系方式</label><input name="contact"></div>
+    <div class="field"><label>二维码类型</label><select name="qrType"><option value="">未设置</option><option value="群聊">群聊二维码</option><option value="个人">个人二维码</option></select></div>
+  </div>
+  <div class="field"><label>一句话介绍 *</label><textarea name="subtitle"></textarea></div>
+  <div class="field"><label>主要活动（每行一条）</label><textarea name="activities"></textarea></div>
+  <div class="field"><label>加入引导语</label><input name="join"></div>
+  <div class="field"><label>加入补充说明</label><input name="joinSub"></div>
+  <div class="checks">
+    <label><input type="checkbox" name="ready"> 资料已就绪</label>
+    <label><input type="checkbox" name="featured"> 首页主推</label>
+    <label><input type="checkbox" name="hidden"> 前台隐藏</label>
+  </div>
+  <div class="form-actions">
+    <span class="msg" id="saveMsg"></span>
+    <div style="display:flex;gap:8px">
+      <button type="button" class="btn" id="cancelBtn">关闭</button>
+      <button type="submit" class="btn primary" id="saveBtn">保存修改</button>
+    </div>
+  </div>
+</form></dialog>
+
+<script>
+(function(){
+  "use strict";
+  var clubs = "__CLUBS_JSON__";
+  var cur=null;
+  function esc(v){return String(v==null?"":v).replace(/[&<>\"]/g,function(c){return({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"})[c];});}
+  function rows(){
+    document.getElementById("rows").innerHTML=clubs.map(function(c,i){
+      var chips=(c.hasPoster?'<span class="chip ok">海报</span>':'<span class="chip no">缺海报</span>')
+        +(c.ready?'<span class="chip ok">就绪</span>':'<span class="chip no">待补</span>')
+        +(c.featured?'<span class="chip ok">主推</span>':'')
+        +(c.hidden?'<span class="chip off">已隐藏</span>':'');
+      var thumb=c.hasPoster?'<img class="thumb" src="/poster/'+esc(c.slug)+'.jpg?t='+Date.now()+'" alt="">':'<div class="nothumb">无海报</div>';
+      return '<tr><td>'+thumb+'</td><td><b>'+esc(c.name)+'</b><br><span style="font-size:10px;color:#6d716f">'+esc(c.slug)+'</span></td><td>'+esc(c.group)+'</td><td style="font-size:11px;color:#6d716f">'+esc(c.time||"—")+'<br>'+esc(c.venue||"—")+'</td><td>'+chips+'</td><td style="text-align:right"><button class="btn" data-edit="'+i+'">编辑 / 换海报</button></td></tr>';
+    }).join("");
+  }
+  rows();
+  document.getElementById("rows").addEventListener("click",function(e){
+    var b=e.target.closest("[data-edit]");if(!b)return;
+    openEdit(clubs[Number(b.dataset.edit)]);
+  });
+  var dlg=document.getElementById("editDlg"),form=document.getElementById("editForm");
+  function openEdit(c){
+    cur=c;
+    document.getElementById("efName").textContent=c.name+"（"+c.slug+"）";
+    ["name","group","titleA","titleB","motto","color","time","venue","president","vicePresidents","contact","qrType","subtitle","join","joinSub"].forEach(function(k){form.elements[k].value=c[k]||"";});
+    form.elements.activities.value=(c.activities||[]).join("\n");
+    form.elements.ready.checked=!!c.ready;form.elements.featured.checked=!!c.featured;form.elements.hidden.checked=!!c.hidden;
+    renderPoster();
+    document.getElementById("saveMsg").textContent="";document.getElementById("posterMsg").textContent="";
+    dlg.showModal();
+  }
+  function renderPoster(){
+    document.getElementById("posterPreview").innerHTML=cur.hasPoster?'<img src="/poster/'+esc(cur.slug)+'.jpg?t='+Date.now()+'" alt="海报预览">':'<div class="nothumb">暂无海报</div>';
+    document.getElementById("posterMeta").innerHTML='二维码类型：'+esc(cur.qrType||"未设置")+'<br>位置备注：'+esc(cur.qrNote||"—")+'<br>支持 JPG / PNG，上传后自动压缩并即时替换前台海报。';
+  }
+  document.getElementById("cancelBtn").addEventListener("click",function(){dlg.close();});
+  form.addEventListener("submit",function(e){
+    e.preventDefault();
+    var btn=document.getElementById("saveBtn"),msg=document.getElementById("saveMsg");
+    btn.disabled=true;msg.className="msg";msg.textContent="保存中…";
+    var body={};
+    ["name","group","titleA","titleB","motto","color","time","venue","president","vicePresidents","contact","qrType","subtitle","join","joinSub"].forEach(function(k){body[k]=form.elements[k].value.trim()||null;});
+    body.activities=form.elements.activities.value.split("\n").map(function(s){return s.trim();}).filter(Boolean);
+    body.ready=form.elements.ready.checked;body.featured=form.elements.featured.checked;body.hidden=form.elements.hidden.checked;
+    fetch("/admin/api/club/"+cur.slug,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)})
+      .then(function(r){return r.json();})
+      .then(function(j){
+        btn.disabled=false;
+        if(j.ok){Object.assign(cur,body);msg.className="msg ok";msg.textContent="已保存并存档 ✓";rows();}
+        else{msg.className="msg err";msg.textContent=j.error||"保存失败";}
+      }).catch(function(){btn.disabled=false;msg.className="msg err";msg.textContent="网络异常，请重试";});
+  });
+  /* poster upload with client-side compression */
+  document.getElementById("pickPoster").addEventListener("click",function(){document.getElementById("posterFile").click();});
+  document.getElementById("posterFile").addEventListener("change",function(){
+    var f=this.files[0];this.value="";if(!f)return;
+    var msg=document.getElementById("posterMsg");msg.className="msg";msg.textContent="压缩中…";
+    compress(f,function(err,blob){
+      if(err){msg.className="msg err";msg.textContent=err;return;}
+      msg.textContent="上传中…（"+Math.round(blob.size/1024)+"KB）";
+      blob.arrayBuffer().then(function(buf){
+        return fetch("/admin/api/poster/"+cur.slug,{method:"POST",headers:{"Content-Type":"application/octet-stream"},body:buf});
+      }).then(function(r){return r.json();}).then(function(j){
+        if(j.ok){cur.hasPoster=true;msg.className="msg ok";msg.textContent="海报已替换 ✓";renderPoster();rows();}
+        else{msg.className="msg err";msg.textContent=j.error||"上传失败";}
+      }).catch(function(){msg.className="msg err";msg.textContent="网络异常，请重试";});
+    });
+  });
+  function compress(file,cb){
+    var img=new Image();
+    img.onload=function(){
+      var max=1400,w=img.naturalWidth,h=img.naturalHeight;
+      if(w>max){h=Math.round(h*max/w);w=max;}
+      var cv=document.createElement("canvas");cv.width=w;cv.height=h;
+      cv.getContext("2d").drawImage(img,0,0,w,h);
+      var tryQ=function(q){
+        cv.toBlob(function(b){
+          if(!b)return cb("图片处理失败");
+          if(b.size<=880*1024||q<=0.5)return b.size<=880*1024?cb(null,b):cb("图片过大，压缩后仍超限，请先缩小原图");
+          tryQ(q-0.15);
+        },"image/jpeg",q);
+      };
+      tryQ(0.82);
+      URL.revokeObjectURL(img.src);
+    };
+    img.onerror=function(){cb("无法读取该图片");};
+    img.src=URL.createObjectURL(file);
+  }
+  document.getElementById("reloadBtn").addEventListener("click",function(e){
+    e.preventDefault();
+    fetch("/admin/api/reload",{method:"POST"}).then(function(r){return r.json();}).then(function(j){
+      if(j.ok)location.reload();else alert(j.error||"刷新失败");
+    });
+  });
+})();
+</script>
+</body>
+</html>

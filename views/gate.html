@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#111C35">
+<title>员工社团 · 请输入访问密码</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#111C35;color:#F2EDE2;font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;overflow:hidden}
+body::before{content:"";position:fixed;inset:0;opacity:.18;background-image:linear-gradient(rgba(255,255,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.07) 1px,transparent 1px);background-size:42px 42px}
+body::after{content:"";position:fixed;width:640px;height:640px;border:2px dashed rgba(232,112,26,.3);border-radius:50%;right:-260px;top:-160px}
+.gate{position:relative;z-index:2;width:min(400px,calc(100% - 48px))}
+.kicker{display:flex;align-items:center;gap:12px;color:#ff9b58;font-size:11px;font-weight:900;letter-spacing:.3em;margin-bottom:22px}
+.kicker::before{content:"";width:38px;height:3px;background:#E8701A}
+h1{font-family:"Noto Serif SC","Songti SC","STSong",serif;font-weight:900;font-size:44px;line-height:1.2;letter-spacing:.04em}
+h1 span{color:#ff8140}
+.note{margin-top:16px;font-size:12px;line-height:1.8;color:rgba(242,237,226,.55)}
+form{margin-top:32px;display:flex}
+input{flex:1;height:52px;border:1px solid rgba(242,237,226,.35);border-right:0;background:rgba(255,255,255,.06);color:#F2EDE2;padding:0 16px;font-size:15px;letter-spacing:.1em;outline:none}
+input:focus{border-color:#E8701A}
+button{height:52px;padding:0 22px;border:0;background:#E8701A;color:#111827;font-size:12px;font-weight:900;letter-spacing:.12em;cursor:pointer}
+button:disabled{opacity:.55;cursor:wait}
+.err{margin-top:12px;font-size:12px;color:#ff8f6b;min-height:18px}
+.foot{margin-top:44px;font-size:9px;letter-spacing:.14em;color:rgba(242,237,226,.35)}
+</style>
+</head>
+<body>
+<div class="gate">
+  <div class="kicker">INTERNAL ACCESS</div>
+  <h1 id="title">员工社团<br>招新官网</h1>
+  <p class="note" id="note">本站为内部内容，仅供受邀人员查看。请输入访问密码。</p>
+  <form id="f"><input id="pw" type="password" placeholder="访问密码" autocomplete="current-password" autofocus><button id="go" type="submit">进入</button></form>
+  <div class="err" id="err"></div>
+  <div class="foot">员工社团招新计划 · 2026 · INTERNAL USE ONLY</div>
+</div>
+<script>
+(function(){
+  "use strict";
+  var MODE="__MODE__";
+  if(MODE==="admin"){
+    document.getElementById("title").innerHTML='社团后台<br>海报<span>管理</span>';
+    document.getElementById("note").textContent="管理后台需要管理员密码。";
+  }
+  document.getElementById("f").addEventListener("submit",function(e){
+    e.preventDefault();
+    var go=document.getElementById("go"),err=document.getElementById("err");
+    go.disabled=true;err.textContent="";
+    fetch("/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password:document.getElementById("pw").value})})
+      .then(function(r){return r.json().then(function(j){return{status:r.status,j:j};});})
+      .then(function(o){
+        if(o.j.ok){
+          if(MODE==="admin"&&o.j.role!=="admin"){go.disabled=false;err.textContent="该密码没有管理权限。";return;}
+          location.reload();
+        }else{go.disabled=false;err.textContent=o.j.error||"密码不正确";}
+      })
+      .catch(function(){go.disabled=false;err.textContent="网络异常，请重试";});
+  });
+})();
+</script>
+</body>
+</html>
