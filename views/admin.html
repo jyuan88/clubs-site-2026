@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<title>社团后台 · 海报管理</title>
+<title>协会后台 · 海报管理</title>
 <style>
 :root{--paper:#F2EDE2;--navy:#1B2A4A;--deep:#111C35;--orange:#E8701A;--muted:#6d716f;--line:rgba(27,42,74,.16)}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -58,10 +58,10 @@ dialog::backdrop{background:rgba(7,12,24,.7)}
 </style>
 </head>
 <body>
-<header><div class="wrap"><h1 class="serif">社团后台 · 海报管理</h1><nav><a href="/">查看前台</a><a href="#" id="reloadBtn">从仓库刷新</a><a href="/logout">退出</a></nav></div></header>
+<header><div class="wrap"><h1 class="serif">协会后台 · 海报管理</h1><nav><a href="/">查看前台</a><a href="#" id="reloadBtn">从仓库刷新</a><a href="/logout">退出</a></nav></div></header>
 <main><div class="wrap">
-  <p class="tip">在这里维护各社团的资料与海报：点「编辑」修改文字信息，点「换海报」上传新海报（JPG/PNG，系统会自动压缩到合适大小）。改动即时生效并自动存档到内容仓库。「隐藏」的社团不会出现在前台。</p>
-  <table class="tbl"><thead><tr><th>海报</th><th>社团</th><th>分类</th><th>时间 / 地点</th><th>状态</th><th style="text-align:right">操作</th></tr></thead><tbody id="rows"></tbody></table>
+  <p class="tip">在这里维护各协会的资料与海报：点「编辑」修改文字信息，点「换海报」上传新海报（JPG/PNG，系统会自动压缩到合适大小）。改动即时生效并自动存档到内容仓库。「隐藏」的协会不会出现在前台。</p>
+  <table class="tbl"><thead><tr><th>海报</th><th>协会</th><th>分类</th><th>时间 / 地点</th><th>状态</th><th style="text-align:right">操作</th></tr></thead><tbody id="rows"></tbody></table>
 </div></main>
 
 <dialog id="editDlg"><form class="form" id="editForm" method="dialog">
@@ -80,7 +80,7 @@ dialog::backdrop{background:rgba(7,12,24,.7)}
   </div>
   <div class="grid2">
     <div class="field"><label>协会名称 *</label><input name="name" required></div>
-    <div class="field"><label>分类 *</label><select name="group"><option>球类运动</option><option>健身户外</option><option>文化生活</option><option>公益志愿</option></select></div>
+    <div class="field"><label>分类 *</label><select name="group"><option>球类</option><option>健身活动</option><option>文体文化</option><option>志愿活动</option></select></div>
     <div class="field"><label>大标题·上（2-3字） *</label><input name="titleA"></div>
     <div class="field"><label>大标题·下（2-4字） *</label><input name="titleB"></div>
     <div class="field"><label>口号</label><input name="motto"></div>

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <meta name="theme-color" content="#111C35">
-<title>员工社团 · 请输入访问密码</title>
+<title>员工协会 · 请输入访问密码</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#111C35;color:#F2EDE2;font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;overflow:hidden}
@@ -29,18 +29,18 @@ button:disabled{opacity:.55;cursor:wait}
 <body>
 <div class="gate">
   <div class="kicker">INTERNAL ACCESS</div>
-  <h1 id="title">员工社团<br>招新官网</h1>
+  <h1 id="title">活力中投<br>协会 2026</h1>
   <p class="note" id="note">本站为内部内容，仅供受邀人员查看。请输入访问密码。</p>
   <form id="f"><input id="pw" type="password" placeholder="访问密码" autocomplete="current-password" autofocus><button id="go" type="submit">进入</button></form>
   <div class="err" id="err"></div>
-  <div class="foot">员工社团招新计划 · 2026 · INTERNAL USE ONLY</div>
+  <div class="foot">员工协会招新计划 · 2026 · INTERNAL USE ONLY</div>
 </div>
 <script>
 (function(){
   "use strict";
   var MODE="__MODE__";
   if(MODE==="admin"){
-    document.getElementById("title").innerHTML='社团后台<br>海报<span>管理</span>';
+    document.getElementById("title").innerHTML='协会后台<br>海报<span>管理</span>';
     document.getElementById("note").textContent="管理后台需要管理员密码。";
   }
   document.getElementById("f").addEventListener("submit",function(e){

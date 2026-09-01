@@ -122,7 +122,7 @@ function renderSite() {
   }));
   return tpl.site
     .replace('"__CLUBS_JSON__"', safeJson(visible))
-    .replace('"__EVENTS_JSON__"', safeJson(cache.clubs.events || []));
+    .replace('"__POSTERS_INLINE__"', '""');
 }
 function renderAdmin() {
   const all = cache.clubs.clubs.map((c) => ({ ...c, hasPoster: cache.posters.has(c.slug) }));
