@@ -174,7 +174,7 @@ app.get('/admin', (req, res) => {
 
 const EDITABLE = ['name', 'group', 'color', 'motto', 'titleA', 'titleB', 'subtitle', 'venue', 'time',
   'activities', 'contact', 'join', 'joinSub', 'qrType', 'qrNote', 'president', 'vicePresidents',
-  'ready', 'hidden', 'featured', 'schedule'];
+  'ready', 'hidden', 'featured', 'schedule', 'leadLabel', 'deputyLabel'];
 app.post('/admin/api/club/:slug', requireAdmin, async (req, res) => {
   const club = cache.clubs.clubs.find((c) => c.slug === req.params.slug);
   if (!club) return res.status(404).json({ ok: false, error: '社团不存在' });

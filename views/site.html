@@ -267,7 +267,7 @@ body.dialog-open{overflow:hidden}
     }
     document.getElementById("dialogSubtitle").textContent=c.subtitle||"该协会的介绍尚未确认。";
     var meta='<div class="meta-box"><small>活动时间</small><b>'+esc(c.time||"[待补]")+'</b></div><div class="meta-box"><small>活动地点</small><b>'+esc(c.venue||"[待补]")+'</b></div>';
-    if(c.president)meta+='<div class="meta-box"><small>会长</small><b>'+esc(c.president)+'</b></div><div class="meta-box"><small>副会长</small><b>'+esc(c.vicePresidents||"—")+'</b></div>';
+    if(c.president)meta+='<div class="meta-box"><small>'+esc(c.leadLabel||"会长")+'</small><b>'+esc(c.president)+'</b></div><div class="meta-box"><small>'+esc(c.deputyLabel||"副会长")+'</small><b>'+esc(c.vicePresidents||"—")+'</b></div>';
     document.getElementById("dialogMeta").innerHTML=meta;
     document.getElementById("dialogActivities").innerHTML=(c.activities&&c.activities.length?c.activities:["[活动内容] [待补]"]).map(function(a,i){return'<div class="activity-item"><i>'+String(i+1).padStart(2,"0")+'</i>'+esc(a)+'</div>';}).join("");
     document.getElementById("dialogJoin").textContent=c.join||(c.ready?"欢迎加入 "+c.name:"加入方式待补");
