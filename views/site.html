@@ -237,7 +237,7 @@ body.dialog-open{overflow:hidden}
   })();
 
   /* ---- grid ---- */
-  function cardHTML(c,i){return '<article class="mini-card '+(c.ready?'ready':'pending')+'" style="--accent:'+esc(c.color)+'" data-index="'+i+'" data-group="'+esc(c.group)+'" tabindex="0" role="button" aria-label="查看 '+esc(c.name)+' 详情"><div class="mini-card-top"><span class="mini-index">'+String(i+1).padStart(2,"0")+' / '+clubs.length+'</span><span class="mini-status">'+(c.hasPoster?'海报已就绪':(c.ready?'资料已就绪':'[资料待补]'))+'</span></div><h3 class="serif">'+esc(c.name)+'<span>'+esc(c.motto||c.group)+'</span></h3><div class="mini-shape" aria-hidden="true"></div><p class="mini-info">'+esc(c.time?c.time+(c.venue?' · '+c.venue:''):(c.venue||'[时间地点] [待补]'))+'</p></article>';}
+  function cardHTML(c,i){return '<article class="mini-card '+(c.ready?'ready':'pending')+'" style="--accent:'+esc(c.color)+'" data-index="'+i+'" data-group="'+esc(c.group)+'" tabindex="0" role="button" aria-label="查看 '+esc(c.name)+' 详情"><div class="mini-card-top"><span class="mini-index">'+String(i+1).padStart(2,"0")+' / '+clubs.length+'</span><span class="mini-status">'+(c.hasPoster?'海报已就绪':(c.ready?'资料已就绪':'[资料待补]'))+'</span></div><h3 class="serif">'+esc(c.name)+'<span>'+esc(c.motto||c.group)+'</span></h3><div class="mini-shape" aria-hidden="true"></div><p class="mini-info">'+esc(c.time?c.time+(c.venue?' · '+c.venue:''):(c.venue||'活动安排见群内通知'))+'</p></article>';}
   function bindTilt(nodes){if(isTouch)return;Array.prototype.forEach.call(nodes,function(card){card.addEventListener("pointermove",function(e){if(reduced)return;var r=card.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;card.style.transform="perspective(900px) rotateX("+(-y*4).toFixed(2)+"deg) rotateY("+(x*5).toFixed(2)+"deg) translateY(-3px)";});card.addEventListener("pointerleave",function(){card.style.transform="";});});}
   function render(){var q=search.value.trim().toLowerCase(),list=clubs.map(function(c,i){return{c:c,i:i};}).filter(function(item){var c=item.c,hay=(c.name+" "+c.group+" "+(c.time||"")+" "+(c.venue||"")).toLowerCase();return(activeFilter==="全部"||c.group===activeFilter)&&(!q||hay.indexOf(q)>-1);});grid.innerHTML=list.map(function(item){return cardHTML(item.c,item.i);}).join("");resultCount.textContent=list.length;noResults.classList.toggle("show",list.length===0);bindTilt(grid.querySelectorAll(".mini-card"));}
 
@@ -266,11 +266,11 @@ body.dialog-open{overflow:hidden}
       vis.innerHTML='<div class="dialog-num">'+String(index+1).padStart(2,"0")+' / '+clubs.length+' · '+esc(c.group)+'</div><h2 class="serif">'+esc(c.titleA)+'<span>'+esc(c.titleB)+'</span></h2><p class="dialog-motto">'+esc(c.name)+(c.motto?' · '+esc(c.motto):'')+'</p>';
     }
     document.getElementById("dialogSubtitle").textContent=c.subtitle||"该协会的介绍尚未确认。";
-    var meta='<div class="meta-box"><small>活动时间</small><b>'+esc(c.time||"[待补]")+'</b></div><div class="meta-box"><small>活动地点</small><b>'+esc(c.venue||"[待补]")+'</b></div>';
+    var meta='<div class="meta-box"><small>活动时间</small><b>'+esc(c.time||"见群内通知")+'</b></div><div class="meta-box"><small>活动地点</small><b>'+esc(c.venue||"见群内通知")+'</b></div>';
     if(c.president)meta+='<div class="meta-box"><small>'+esc(c.leadLabel||"会长")+'</small><b>'+esc(c.president)+'</b></div><div class="meta-box"><small>'+esc(c.deputyLabel||"副会长")+'</small><b>'+esc(c.vicePresidents||"—")+'</b></div>';
     document.getElementById("dialogMeta").innerHTML=meta;
-    document.getElementById("dialogActivities").innerHTML=(c.activities&&c.activities.length?c.activities:["[活动内容] [待补]"]).map(function(a,i){return'<div class="activity-item"><i>'+String(i+1).padStart(2,"0")+'</i>'+esc(a)+'</div>';}).join("");
-    document.getElementById("dialogJoin").textContent=c.join||(c.ready?"欢迎加入 "+c.name:"加入方式待补");
+    document.getElementById("dialogActivities").innerHTML=(c.activities&&c.activities.length?c.activities:["活动安排见群内通知"]).map(function(a,i){return'<div class="activity-item"><i>'+String(i+1).padStart(2,"0")+'</i>'+esc(a)+'</div>';}).join("");
+    document.getElementById("dialogJoin").textContent=c.join||(c.ready?"欢迎加入 "+c.name:"入群方式见群内通知");
     document.getElementById("dialogJoinSub").textContent=c.joinSub||"";
     document.getElementById("dialogContact").textContent=c.contact||"";
     var cue=document.getElementById("qrCue");
